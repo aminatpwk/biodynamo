@@ -1,31 +1,56 @@
-<p align="center">
-  <a href="https://www.biodynamo.org/">
-    <img src="https://github.com/BioDynaMo/biodynamo.github.io/blob/master/images/bdm_logo_large.png" alt="BioDynaMo logo" width="72" height="72">
-  </a>
-</p>
 
-<h3 align="center">
-  <a href="http://www.biodynamo.org/">BioDynaMo</a>
-</h3>
+**Research Fork** — This repository is a fork of [BioDynaMo](https://github.com/BioDynaMo/biodynamo) maintained for the research project below. The original README follows.
 
-<p align="center">
-  The open-source Biology Dynamics Modeller
-  <br>
-  <br>
-  <a href="https://www.biodynamo.org/user-guide/">User's guide</a>
-  |
-  <a href="https://www.biodynamo.org/developer-guide/">Developer's guide</a>
-  |
-  <a href="https://github.com/BioDynaMo/biodynamo/issues/new">Report an issue or bug</a>
-</p>
+[![Language: C++](https://img.shields.io/badge/language-C%2B%2B-00599C?logo=c%2B%2B&logoColor=white)](https://en.wikipedia.org/wiki/C%2B%2B) [![Build: CMake](https://img.shields.io/badge/build-CMake-6A6A6A?logo=cmake&logoColor=white)](https://cmake.org/) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENSE) [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)]() 
 
-<p align="center">
-  <a href="https://github.com/BioDynaMo/biodynamo/actions/workflows/ubuntu-system-ci.yml"><img src="https://github.com/BioDynaMo/biodynamo/actions/workflows/ubuntu-system-ci.yml/badge.svg"/></a>
-  <a href="https://github.com/BioDynaMo/biodynamo/actions/workflows/macos-system-ci.yml"><img src="https://github.com/BioDynaMo/biodynamo/actions/workflows/macos-system-ci.yml/badge.svg"/></a>
-  <a href="https://sonarcloud.io/project/overview?id=BioDynaMo_biodynamo"><img src="https://sonarcloud.io/api/project_badges/measure?project=BioDynaMo_biodynamo&metric=alert_status"/></a>
-  <a href="https://discord.com/invite/kTcTTNFy"><img src="https://img.shields.io/discord/1029690454574370816"/></a>
-  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
-</p>
+---
+
+## Understanding Performance Bottlenecks of Large-Scale Agent-Based Simulations
+
+This fork supports research into the computational performance characteristics of large-scale
+agent-based simulations built on BioDynaMo, with a focus on memory-bound workload behavior
+and hardware-level profiling.
+
+### Research Focus
+
+- Identifying and characterizing performance bottlenecks (LLC misses, memory bandwidth saturation)
+  in biologically realistic agent-based simulations
+- Profiling with hardware performance counters (`perf`) against established memory-boundedness
+  thresholds (DAMOV benchmark suite)
+- Evaluating the suitability of Processing-In-Memory (PIM) architectures for offloading
+  memory-bound simulation kernels
+
+### Simulation Workload
+
+The primary workload used in this study is the SIR agent-based epidemiology demo located in
+`demo/epidemiology`. The demo implements a stochastic SIR (Susceptible–Infected–Recovered)
+model with the following characteristics:
+
+- Agents (`Person`) hold a discrete state: `kSusceptible`, `kInfected`, or `kRecovered`.
+- Infection is implemented via an `Infection` behavior: when a susceptible agent is considered,
+  it draws a random value and, if below the per-step `infection_probability`, performs a
+  neighbor query within `infection_radius` (via `UniformGridEnvironment::ForEachNeighbor`) to
+  detect infected neighbors; if any infected neighbor is found the agent becomes infected.
+- Recovery is modeled via a `Recovery` behavior that applies a per-step `recovery_probability`
+  to transition infected agents to recovered.
+- Agents may also perform `RandomMovement`, producing irregular spatial updates and
+  scatter-access memory patterns during neighbor lookups.
+
+These neighbor queries and irregular agent interactions create memory access patterns
+that are suitable for studying memory-boundedness, cache behavior, and the impact of
+hardware-level optimizations.
+
+Key parameters (see `demo/epidemiology/src/sim-param.h`) include `beta`, `gamma`, `infection_radius`,
+`infection_probability`, `recovery_probability`, `initial_population_*`, and `number_of_iterations`.
+
+### Affiliation
+
+Amina Sokoli — Secure and Sustainable System Scaling Lab, CISPA Helmholtz Center for Information Security  
+Advisor: Abdullah Giray Yağlıkçı
+
+---
+
+The original README follows.
 
 ## What is BioDynaMo?
 
