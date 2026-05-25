@@ -4,7 +4,6 @@
         "statistics": true,
         "debug_numa": false,
         "simulation_time_step": 1,
-        "repeat": 2,
         "bound_space": 2,
         "min_bound": 0,
         "max_bound": 3684,
@@ -15,6 +14,7 @@
         }
     },
     "bdm::SimParam": {
+        "repeat": 4,
         "beta" : 0.06719,
         "gamma" : 0.00521,
         "agent_diameter": 2,

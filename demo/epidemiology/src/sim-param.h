@@ -21,7 +21,7 @@ struct SimParam : public ParamGroup {
   std::string mode = "sim-and-analytical";
   real_t beta = 0.06719;
   real_t gamma = 0.00521;
-  uint64_t repeat = 10;
+  uint64_t repeat = 4;
   bool no_legend = false;
 
   std::string result_plot = "result";
