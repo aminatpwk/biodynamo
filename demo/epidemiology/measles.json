@@ -14,7 +14,7 @@
         }
     },
     "bdm::SimParam": {
-        "repeat": 4,
+        "repeat": 3,
         "beta" : 0.06719,
         "gamma" : 0.00521,
         "agent_diameter": 2,
