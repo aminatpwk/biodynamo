@@ -24,7 +24,7 @@
         "initial_population_infected": 500000,
         "initial_population_susceptible": 99500000,
         "moving_agents_ratio": 1,
-        "number_of_iterations": 24000,
+        "number_of_iterations": 3000,
         "recovery_probability": 0.00521
     }
 }
