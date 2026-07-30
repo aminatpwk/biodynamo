@@ -40,7 +40,7 @@ Node* List::PopFront() {
     auto* ret = head_;
     head_ = head_->next;
     if (head_ != nullptr) {
-      __builtin_prefetch(head_->next);
+      __builtin_prefetch(head_->next); // AMINA: prefetches one hop ahead in a linked list;
     }
     if (tail_ == ret) {
       tail_ = nullptr;

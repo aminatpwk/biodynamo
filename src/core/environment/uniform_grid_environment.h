@@ -140,6 +140,9 @@ class UniformGridEnvironment : public Environment {
         countdown_--;
         if (countdown_ > 0) {
           current_value_ = grid_->successors_[current_value_];
+          if (countdown_ > 1) {
+            __builtin_prefetch(&grid_->successors_[current_value_]); // AMINA: warm the next successors_[] index one hop ahead;
+          }
         }
         return *this;
       }
@@ -502,6 +505,9 @@ class UniformGridEnvironment : public Environment {
       auto ah = *ni;
       // increment iterator already here to hide memory latency
       ++ni;
+      if(!ni.IsAtEnd()){
+        __builtin_prefetch(rm->GetAgent(*ni), 0, 1); // AMINA: prefetches the Agent object for the upcoming handle;
+      }
       auto* agent = rm->GetAgent(ah);
       if (agent != query_agent) {
         agents[size] = agent;
