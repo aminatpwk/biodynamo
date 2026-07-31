@@ -211,6 +211,11 @@ class UniformGridEnvironment : public Environment {
     NeighborIterator& ForwardToNonEmptyBox(uint64_t grid_timestamp) {
       // increment box id until non empty box has been found
       while (++box_idx_ < neighbor_boxes_.size()) {
+        // Prefetch the next candidate box, so its cache line (timestamp_,
+        // length_, start_) is in flight while we finish checking the current one.
+        if (box_idx_ + 1 < neighbor_boxes_.size()) {
+          __builtin_prefetch(neighbor_boxes_[box_idx_ + 1]);
+        }
         // box is empty or uninitialized (padding box) -> continue
         if (neighbor_boxes_[box_idx_]->IsEmpty(grid_timestamp)) {
           continue;
