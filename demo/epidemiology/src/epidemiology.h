@@ -17,6 +17,10 @@
 #include "person.h"
 #include "sim-param.h"
 
+#ifdef BARRIERPOINT_INSTRUMENTATION
+#include "sim_api.h"
+#endif 
+
 namespace bdm {
 
 // This is the main simulation function
@@ -82,7 +86,15 @@ inline int Simulate(int argc, const char** argv, TimeSeries* result,
   // Simulate for SimParam::number_of_iterations steps
   {
     Timing timer("RUNTIME");
+#ifdef BARRIERPOINT_INSTRUMENTATION
+    //mark the region of interest for Barrierpoint's Pin-based sampling.  
+    // see trevorcarlson/barrierpoint.
+    SimRoiStart();
+#endif
     scheduler->Simulate(sparam->number_of_iterations);
+#ifdef BARRIERPOINT_INSTRUMENTATION
+    SimRoiEnd();
+#endif
   }
   // move time series data from simulation to result
   *result = std::move(*sim.GetTimeSeries());
